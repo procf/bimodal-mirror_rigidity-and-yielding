@@ -27,13 +27,19 @@ For systems of ~10,000 colloidal particles the following scripts are available:
 [analysis-mech](./analysis-scripts/analysis-mech)
 - Quench the system to remove negative-curvature artifacts
 - Calculate the relative contribution of different bonds to the affine (Born) contribution to the static shear modulus
-- Calculate the relative localization of the non-affine response using a per-bond harmonic relaxation energy
+- Calculate per-bond non-affine projection 
 
 [analysis-yielding](./analysis-scripts/analysis-yielding)
-- Classify bond breaks that occur during shear
-- Calculate per-particle non-affine motion using $\langle D^2_{min} \rangle$
+- Extract shear stress from simulation gsd-properties
 - Measure bond orientation from the fabric tensor
+- Calculate per-particle non-affine motion using Falk-Langer $\langle D^2_{min} \rangle$
+
+plot-script
+- Calculate relative localization of the non-affine response using a per-bond harmonic relaxation energy
+- Classify bond breaks that occur during shear
 - Calculate cumulative mean strain per bond
+
+
 
 Note: GMM clustering and FIRE quenching can each take ~9hrs. Other analyses typically take less than 1min. 
 
@@ -52,6 +58,8 @@ In this project, the following packages are actively used:
 8. `node2vec` v0.5.0
 9. `umap-learn` v0.5.9
 10. `scikit-learn` v1.7.2
+11. `freud-analysis` v3.4.0
+12. `joblib` v1.5.2
 
 ## Hardware/OS tested
 The program was tested on a single HPC-node running Rocky Linux 9.3 (kernel 5.14).

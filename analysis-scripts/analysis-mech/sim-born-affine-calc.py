@@ -26,7 +26,6 @@ import pandas as pd
 import gsd.hoomd
 import sys
 import os
-import numpy as np
 
 
 # create "born-Gprime" subfolder if it doesn't exit
