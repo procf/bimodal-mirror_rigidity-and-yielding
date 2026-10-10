@@ -1,0 +1,62 @@
+#!/bin/bash
+
+base_path='../../sim-scripts'
+percent_large=( '0.0' '0.5' '1.0')
+
+
+# Redirect stdout and stderr to a file named with today's date
+# (but use tee so that the output is also displayed on the terminal)
+current_date=$(date +"%Y-%m-%d")
+output_file="net_joblist_${current_date}.txt"
+exec > >(tee -a "$output_file") 2>&1
+
+curr_dir="$(pwd)"
+pwd
+
+
+for ((c=0; c<${#percent_large[@]}; c++)); do
+    comp_val="${percent_large[$c]}"
+    large=$(printf "%.0f" "$(echo "$comp_val * 100" | bc -l)")
+    small=$((100 - large))
+    composition="${small}-${large}"
+    #echo $composition
+       
+    if [[ $large -ne 0 && $small -ne 0 ]]; then
+        bimodal_bool="True"
+    else
+        bimodal_bool="False"
+    fi
+
+    sim_path="${base_path}/${composition}/potential-morse-bysize"
+    #echo $sim_path
+
+    if [[ "$bimodal_bool" == "True" ]]; then
+        analysis_path="${sim_path}/analysis-bi-colloids"
+        echo $analysis_path
+        #mkdir -p "$analysis_path"
+    else
+        analysis_path="${sim_path}/analysis-DPD"
+        echo $analysis_path
+        #mkdir -p "$analysis_path"
+    fi
+
+    gel_path="${sim_path}/Gelation.gsd"
+    #echo $gel_path
+
+    data_path="${analysis_path}/data"
+
+    #echo $data_path
+    mkdir -p "$data_path"
+
+    cp analyze-particle-net $analysis_path/job-net
+
+    sed -i "s|gel_file|${gel_path}|g" $analysis_path/job-net
+    sed -i "s/bimodal_bool/${bimodal_bool}/g" $analysis_path/job-net
+    sed -i "s|data_file|${data_path}|g" $analysis_path/job-net
+
+    cd $analysis_path
+    sbatch job-net 
+    cd $curr_dir
+    echo "---"
+
+done

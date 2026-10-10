@@ -1,0 +1,23 @@
+#!/bin/bash
+#SBATCH -J GMM
+#SBATCH --nodes=1
+#SBATCH --ntasks-per-node=1
+#SBATCH --cpus-per-task=1
+#SBATCH -t 24:00:00
+#SBATCH -p long
+#SBATCH --mem=128Gb
+#SBATCH -o %A-gmm.out
+#SBATCH -e %A-gmm.err
+
+start=$SECONDS
+
+module load miniconda3/24.11.1
+source /projects/props/Rob/software/hoomd4.2.1-mod/hoomdmod4.2.1-venv/bin/activate
+module load OpenMPI/4.1.6
+
+# run the analysis file(s)
+python exec_cluster.py gel_file bimodal_bool data_file cluster_style
+
+
+time=$((SECONDS-start))
+echo The simulation ran for $((time / 86400))day"(s)" $(((time / 3600) % 24))hr"(s)" $(((time / 60) % 60))min $((time % 60))sec real "(wall clock)" time >&1

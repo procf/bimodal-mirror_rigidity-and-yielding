@@ -1104,9 +1104,6 @@ for size in size_ratios:
                                 rcut = cut_off
                                 lbox = traj[-1].configuration.box[:3]
 
-
-                                edgelist_calc(pos, radii, lbox, cut_off, edge_file)
-
                                 # cKDTree's periodic mode needs coordinates in [0, L)
                                 wrapped = np.mod(pos + 0.5 * lbox, lbox)
                                 wrapped[wrapped >= lbox] = 0.0  # guard against float round-off landing on L
